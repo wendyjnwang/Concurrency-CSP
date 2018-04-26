@@ -1,0 +1,15 @@
+-- Defines T as the set {1,2 ,3 ,4 ,5}
+T = {1..5}
+-- Declares the events input .1 , output .1 , input .2 etc .
+channel input, output : T
+Proc1 = input ?x -> output .x -> Proc1
+Proc2 = input ?x -> Proc2'({x})
+Proc2'(X) =
+	output ? a:X -> Proc2'(diff(X ,{a}))
+	[] input ? b -> Proc2'(union(X,{b}))
+Proc3 = input ?x -> Proc3'({x})
+Proc3'(X) = 
+	output ? a:X -> Proc3'( diff(X,{a}))
+	[] input ? b:diff(T,X) -> Proc3'(union(X,{b}))
+assert Proc2 [T= Proc1
+assert Proc2 [T= Proc3

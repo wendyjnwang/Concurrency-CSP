@@ -1,0 +1,51 @@
+channel forward, backward, nod, neigh, wag, kick 
+F = {forward,backward,nod,neigh}
+B = {forward,backward,wag,kick}
+
+Front = forward -> neigh -> Front 
+        [] nod -> Front 
+Back = backward -> kick -> Back 
+       [] wag -> Back 
+
+Horse = Front [F||B] Back 
+
+RUN(X) =  [] ev:X @ev -> RUN(X)
+assert RUN({nod,wag}) [T= Horse 
+
+-- Part 4 
+Front1 = neigh -> Front1'
+Front1' =  forward -> backward -> Front1 
+Back1 = forward -> kick -> backward -> Back1 
+
+Horse1 = Front1 [F||B] Back1 
+PH1 = neigh -> forward -> kick -> backward -> PH1 
+
+assert Horse1 [T= PH1 
+assert PH1 [T= Horse1
+
+-- Part 5 
+Front2 = forward -> neigh -> Front2 
+         [] backward -> Front2
+Back2 = forward -> Back2  
+         [] backward -> kick -> Back2
+
+Horse2 = Front2 [F||B] Back2 
+PH2 = forward -> neigh -> PH2 
+      [] backward -> kick -> PH2 
+
+assert Horse2 [T= PH2
+assert PH2 [T= Horse2
+
+-- Part 6 
+Front3 = neigh -> Front3' 
+         [] neigh -> forward -> Front3
+Front3' = forward -> Front3 
+Back3 = wag -> forward -> Back3 
+        [] wag -> Back3' 
+Back3' = forward -> Front3 
+
+Horse3 = Front3 [F||B] Back3
+PH3 = neigh -> wag -> forward -> PH3 
+      [] wag -> neigh -> forward ->PH3 
+assert Horse3 [T= PH3
+assert PH3 [T= Horse3
